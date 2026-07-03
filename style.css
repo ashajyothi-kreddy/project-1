@@ -1,0 +1,301 @@
+/* ==========================================================================
+   DESIGN TOKENS
+   Keeping colors/fonts as variables means if you want to re-theme the
+   whole app later, you only change them in ONE place.
+   ========================================================================== */
+:root {
+  --bg: #14132b;              /* deep indigo background */
+  --surface: #1e1c3d;         /* card background, a bit lighter than bg */
+  --surface-raised: #292656;  /* hovered / raised elements */
+  --text: #edebff;            /* main text, soft lavender-white */
+  --text-dim: #9c98c9;        /* secondary text */
+  --gold: #ffc93c;            /* primary accent - "buzzer" gold */
+  --pink: #ff3e80;            /* wrong answer / urgency */
+  --green: #33d17a;           /* correct answer */
+  --radius: 14px;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(255, 201, 60, 0.07), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(255, 62, 128, 0.08), transparent 40%);
+  color: var(--text);
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.app {
+  width: 100%;
+  max-width: 640px;
+}
+
+/* ==========================================================================
+   SCREEN SWITCHING
+   Every screen has class "screen" (hidden by default).
+   JS adds class "active" to whichever one should show.
+   This is the plain-JS equivalent of React's conditional rendering!
+   ========================================================================== */
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+  animation: fade-in 0.25s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   SHARED TEXT STYLES
+   ========================================================================== */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 8px;
+}
+
+.app-header h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  color: var(--text-dim);
+  margin: 0;
+}
+
+/* ==========================================================================
+   CATEGORY SCREEN
+   ========================================================================== */
+.category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.category-card {
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: left;
+  color: var(--text);
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  background: var(--surface-raised);
+}
+
+.category-card .icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.category-card h3 {
+  font-family: var(--font-display);
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.category-card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.category-card .best {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+}
+
+/* ==========================================================================
+   QUIZ SCREEN
+   ========================================================================== */
+.quiz-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#question-counter {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* The countdown timer - styled like a little flip clock */
+.timer {
+  background: var(--surface);
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  min-width: 60px;
+  text-align: center;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+/* When time is running low, JS adds this class to make it urgent */
+.timer.urgent {
+  border-color: var(--pink);
+  color: var(--pink);
+  animation: pulse 0.6s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.question-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 28px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.question-card h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin: 0 0 22px;
+  line-height: 1.4;
+}
+
+.answers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.answer-btn {
+  background: var(--surface-raised);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 16px;
+  font-size: 15px;
+  text-align: left;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.answer-btn:hover {
+  border-color: var(--gold);
+}
+
+.answer-btn:active {
+  transform: scale(0.98);
+}
+
+/* Added by JS after the user answers, so they get visual feedback */
+.answer-btn.correct {
+  background: rgba(51, 209, 122, 0.18);
+  border-color: var(--green);
+}
+
+.answer-btn.wrong {
+  background: rgba(255, 62, 128, 0.18);
+  border-color: var(--pink);
+}
+
+.answer-btn:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.feedback {
+  min-height: 24px;
+  margin-top: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ==========================================================================
+   RESULTS SCREEN
+   ========================================================================== */
+#results-score {
+  font-size: 44px;
+}
+
+.best-score {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  color: var(--gold);
+}
+
+.results-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #14132b;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--text);
+}
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+@media (max-width: 480px) {
+  .category-grid,
+  .answers-grid {
+    grid-template-columns: 1fr;
+  }
+  .results-actions {
+    flex-direction: column;
+  }
+}
